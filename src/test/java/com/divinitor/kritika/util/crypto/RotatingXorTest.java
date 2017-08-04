@@ -82,14 +82,14 @@ public class RotatingXorTest {
         int key = 0xFFF77700;
         int i = 0x12345678;
         RotatingXor xor = new RotatingXor(key);
-        Assert.assertEquals(0xEDC32178, xor.xor(i));
-        Assert.assertEquals(0xEDC32178, xor.xor(i));
+        Assert.assertEquals(0x1243A187, xor.xor(i));
+        Assert.assertEquals(0x1243A187, xor.xor(i));
         xor.setOffset(1);
-        Assert.assertEquals(0xE5435687, xor.xor(i));
+        Assert.assertEquals(0xED34218F, xor.xor(i));
         xor.setOffset(2);
-        Assert.assertEquals(0x6534A98F, xor.xor(i));
+        Assert.assertEquals(0xE5CB560F, xor.xor(i));
         xor.setOffset(3);
-        Assert.assertEquals(0x12CBA10F, xor.xor(i));
+        Assert.assertEquals(0x65C3A978, xor.xor(i));
 
         Assert.assertEquals(i, xor.xor(xor.xor(i)));
     }

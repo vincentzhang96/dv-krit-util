@@ -53,12 +53,12 @@ public class RotatingXor {
         this.keyBytes[2] = (byte) ((this.key >>> 8) & 0xFF);
         this.keyBytes[3] = (byte) (this.key & 0xFF);
 
-        rotations = new int[4];
+        this.rotations = new int[4];
 
-        rotations[0] = key;
-        rotations[1] = ((key << 8) | ((key & 0xFF000000) >>> 24));
-        rotations[2] = ((key << 16) | ((key & 0xFFFF0000) >>> 16));
-        rotations[3] = ((key << 24) | ((key & 0xFFFFFF00) >>> 8));
+        this.rotations[0] = this.key;
+        this.rotations[1] = ((this.key << 8) | ((this.key & 0xFF000000) >>> 24));
+        this.rotations[2] = ((this.key << 16) | ((this.key & 0xFFFF0000) >>> 16));
+        this.rotations[3] = ((this.key << 24) | ((this.key & 0xFFFFFF00) >>> 8));
     }
 
     /**
@@ -109,13 +109,27 @@ public class RotatingXor {
     }
 
     /**
+     * XORs a short.
+     * @param s The short to XOR
+     * @return The XORed short
+     */
+    public short xor(short s) {
+        byte low = (byte) ((this.keyBytes[offset] ^ (s & 0xFF)) & 0xFF);
+        this.modIncr();
+        byte high = (byte) ((this.keyBytes[offset] ^ (s >>> 8)) & 0xFF);
+        this.modIncr();
+        return (short) (high << 8 | low);
+    }
+
+    /**
      * XORs a single int.
      * @param i The int to XOR
      * @return The XORed int
      */
     public int xor(int i) {
+        i = Integer.reverseBytes(i);
         //  Don't need to increment since multiple of 4
-        return this.rotations[this.offset] ^ i;
+        return Integer.reverseBytes(this.rotations[this.offset] ^ i);
     }
 
     /**
@@ -124,9 +138,10 @@ public class RotatingXor {
      * @return The XORed long
      */
     public long xor(long l) {
+        l = Long.reverseBytes(l);
         int a = this.xor((int) l);
         int b = this.xor((int) (l >>> 32));
-        return a | (((long) b) << 32L);
+        return Long.reverseBytes(a | (((long) b) << 32L));
     }
 
     /**
@@ -136,28 +151,36 @@ public class RotatingXor {
      * @param len Number of bytes to XOR
      */
     public void xor(byte[] b, int pos, int len) {
-        byte[] rotatedKeyBytes = new byte[4];
-        int rotatedKey = this.rotations[this.offset];
-        rotatedKeyBytes[0] = (byte) ((rotatedKey >>> 24) & 0xFF);
-        rotatedKeyBytes[1] = (byte) ((rotatedKey >>> 16) & 0xFF);
-        rotatedKeyBytes[2] = (byte) ((rotatedKey >>> 8) & 0xFF);
-        rotatedKeyBytes[3] = (byte) (rotatedKey & 0xFF);
-
-        //  Unroll the xor loop a bit (Candidate for SIMD)
-        for (int i = 0; i < len - 4; i += 4) {
-            int j = i + pos;
-            b[j] ^= rotatedKeyBytes[0];
-            b[j + 1] ^= rotatedKeyBytes[1];
-            b[j + 2] ^= rotatedKeyBytes[2];
-            b[j + 3] ^= rotatedKeyBytes[3];
+        for (int i = 0, bLength = b.length; i < bLength; i++) {
+            b[i] = this.xor(b[i]);
         }
 
-        //  Remaining elements
-        int remaining  = len % 4;
-        for (int i = 0; i < remaining; ++i) {
-            b[pos + len - i - 1] ^= this.keyBytes[this.offset];
-            this.modIncr();
-        }
+//        byte[] rotatedKeyBytes = new byte[4];
+//        int rotatedKey = this.rotations[this.offset];
+//        rotatedKeyBytes[0] = (byte) ((rotatedKey >>> 24) & 0xFF);
+//        rotatedKeyBytes[1] = (byte) ((rotatedKey >>> 16) & 0xFF);
+//        rotatedKeyBytes[2] = (byte) ((rotatedKey >>> 8) & 0xFF);
+//        rotatedKeyBytes[3] = (byte) (rotatedKey & 0xFF);
+//
+//        int remaining  = len % 4;
+//
+//        //  Unroll the xor loop a bit (Candidate for SIMD)
+//        for (int i = 0; i < len; i += 4) {
+//            int j = i + pos;
+//            if (j + 3 >= len)  {
+//                break;
+//            }
+//            b[j] ^= rotatedKeyBytes[0];
+//            b[j + 1] ^= rotatedKeyBytes[1];
+//            b[j + 2] ^= rotatedKeyBytes[2];
+//            b[j + 3] ^= rotatedKeyBytes[3];
+//        }
+//
+//        //  Remaining elements
+//        for (int i = remaining; i >= 0; --i) {
+//            b[pos + len - i - 1] ^= rotatedKeyBytes[i];
+//            this.modIncr();
+//        }
     }
 
     /**
