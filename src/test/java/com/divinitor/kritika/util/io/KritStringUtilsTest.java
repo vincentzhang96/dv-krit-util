@@ -7,14 +7,14 @@ import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import static com.divinitor.kritika.util.TestUtils.*;
-import static org.junit.Assert.*;
-import static com.divinitor.kritika.util.io.KritStringUtils.*;
+import static com.divinitor.kritika.util.TestUtils.assertPrivateCtor;
+import static com.divinitor.kritika.util.io.KritStringUtils.readSPString;
+import static com.divinitor.kritika.util.io.KritStringUtils.writeSPString;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 public class KritStringUtilsTest {
 

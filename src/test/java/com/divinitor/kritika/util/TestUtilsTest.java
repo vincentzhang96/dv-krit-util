@@ -1,10 +1,10 @@
 package com.divinitor.kritika.util;
 
-import junit.framework.AssertionFailedError;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.divinitor.kritika.util.TestUtils.*;
+import static com.divinitor.kritika.util.TestUtils.assertPrivateCtor;
+import static com.divinitor.kritika.util.TestUtils.fromHexString;
 
 public class TestUtilsTest {
 
@@ -25,7 +25,7 @@ public class TestUtilsTest {
 
     @Test
     public void fromHexStringTest() throws Exception {
-        byte[] data = { 0x00, 0x12, 0x34, 0x56, 0x78,
+        byte[] data = {0x00, 0x12, 0x34, 0x56, 0x78,
                 (byte) 0x9a, (byte) 0xbc, (byte) 0xde, (byte) 0xfA, (byte) 0xBC, (byte) 0xDE, (byte) 0xF0};
         String strData = "00123456789abcdefABCDEF0";
         Assert.assertArrayEquals(data, fromHexString(strData));
@@ -44,14 +44,17 @@ public class TestUtilsTest {
     }
 
     public static class PublicCtorCLass {
-        public PublicCtorCLass() {}
+        public PublicCtorCLass() {
+        }
     }
 
     public static class PrivateCtorClass {
-        private PrivateCtorClass() {}
+        private PrivateCtorClass() {
+        }
     }
 
     public static class NoZeroArgCtorClass {
-        public NoZeroArgCtorClass(int dummy) {}
+        public NoZeroArgCtorClass(int dummy) {
+        }
     }
 }

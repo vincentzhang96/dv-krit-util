@@ -12,5 +12,5 @@ public interface StructReader<T> {
 
     T read(InputStream inputStream, int bytesRead) throws IOException, StructReadException;
 
-    T read (ByteBuffer byteBuffer) throws StructReadException;
+    T read(ByteBuffer byteBuffer) throws StructReadException;
 }

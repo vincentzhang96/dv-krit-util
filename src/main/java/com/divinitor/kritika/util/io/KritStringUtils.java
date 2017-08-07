@@ -1,10 +1,11 @@
 package com.divinitor.kritika.util.io;
 
-import java.io.*;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 
-import static java.nio.charset.StandardCharsets.*;
+import static java.nio.charset.StandardCharsets.UTF_16LE;
 
 /**
  * Provides methods to read/write strings from Kritika files.
@@ -21,6 +22,7 @@ public class KritStringUtils {
      * Reads a length prefixed string from the input stream.
      * The string <b>codepoint count</b> is read out as a short first,
      * then the string data is read in and decoded.
+     *
      * @param in The input stream to read from.
      * @return The decoded string.
      * @throws IOException If there was an error reading the data.
@@ -39,6 +41,7 @@ public class KritStringUtils {
      * Reads a length prefixed string from the data buffer.
      * The string <b>codepoint count</b> is read out as a short first,
      * then the string data is read in and decoded.
+     *
      * @param in The buffer to read from.
      * @return The decoded string.
      */
@@ -55,7 +58,8 @@ public class KritStringUtils {
      * Writes a length prefixed string to the output stream.
      * The string <b>codepoint</b> count is written out as a short first,
      * then the string data encoded as UTF-16LE is written out.
-     * @param s The string to write.
+     *
+     * @param s   The string to write.
      * @param out The output stream to write to.
      * @return The number of bytes written.
      * @throws IOException If there was an error writing the data.
@@ -79,7 +83,8 @@ public class KritStringUtils {
      * Writes a length prefixed string to the data buffer.
      * The string <b>codepoint</b> count is written out as a short first,
      * then the string data encoded as UTF-16LE is written out.
-     * @param s The string to write.
+     *
+     * @param s   The string to write.
      * @param out The buffer to write to.
      * @return The number of bytes written.
      */

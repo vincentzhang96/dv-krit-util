@@ -1,6 +1,5 @@
 package com.divinitor.kritika.util;
 
-import com.divinitor.kritika.util.io.KritStringUtils;
 import org.junit.Assert;
 
 import java.lang.reflect.Constructor;
