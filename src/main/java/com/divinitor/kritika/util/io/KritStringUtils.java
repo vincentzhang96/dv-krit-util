@@ -1,8 +1,6 @@
 package com.divinitor.kritika.util.io;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
@@ -27,7 +25,7 @@ public class KritStringUtils {
      * @return The decoded string.
      * @throws IOException If there was an error reading the data.
      */
-    public static String readSPString(DataInputStream in)
+    public static String readSPString(DataInput in)
             throws IOException {
         //  Multiply by 2 to get data length
         int len = in.readUnsignedShort() * 2;
@@ -62,7 +60,7 @@ public class KritStringUtils {
      * @return The number of bytes written.
      * @throws IOException If there was an error writing the data.
      */
-    public static int writeSPString(String s, DataOutputStream out)
+    public static int writeSPString(String s, DataOutput out)
             throws IOException {
         byte[] data = s.getBytes(UTF_16LE);
 
